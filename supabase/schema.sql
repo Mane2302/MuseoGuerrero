@@ -33,14 +33,13 @@ create table if not exists public.traditions (
   id uuid primary key default gen_random_uuid(),
   author_id uuid not null references public.profiles (id) on delete cascade,
   title text not null check (char_length(title) between 3 and 140),
-  category text not null constraint traditions_category_check check (category in (
+  category text not null check (category in (
     'Artesanía',
     'Danza',
     'Gastronomía',
     'Lengua',
     'Música',
     'Fiesta y celebración',
-    'Memoria histórica',
     'Conocimiento tradicional',
     'Otro'
   )),
@@ -59,8 +58,6 @@ create table if not exists public.traditions (
   description text not null check (char_length(description) between 20 and 1200),
   history text not null check (char_length(history) between 20 and 2000),
   cultural_significance text not null check (char_length(cultural_significance) between 20 and 2000),
-  historical_connection text not null constraint traditions_historical_connection_length
-    check (char_length(historical_connection) between 20 and 2000),
   image_path text not null,
   sources text[] not null check (cardinality(sources) > 0),
   status public.tradition_status not null default 'pending',
@@ -73,40 +70,6 @@ create table if not exists public.traditions (
 
 alter table public.traditions
   add column if not exists tradition_author text not null default 'Autoría sin registrar';
-
-alter table public.traditions
-  add column if not exists historical_connection text;
-
-update public.traditions
-set historical_connection = 'Ficha anterior a la actividad. Completar este apartado con fuentes sobre la memoria de la Independencia en Guerrero y la tradición del Día de Muertos.'
-where historical_connection is null or btrim(historical_connection) = '';
-
-alter table public.traditions
-  alter column historical_connection set not null;
-
-alter table public.traditions
-  drop constraint if exists traditions_historical_connection_length;
-
-alter table public.traditions
-  add constraint traditions_historical_connection_length
-  check (char_length(historical_connection) between 20 and 2000);
-
-alter table public.traditions
-  drop constraint if exists traditions_category_check;
-
-alter table public.traditions
-  add constraint traditions_category_check
-  check (category in (
-    'Artesanía',
-    'Danza',
-    'Gastronomía',
-    'Lengua',
-    'Música',
-    'Fiesta y celebración',
-    'Memoria histórica',
-    'Conocimiento tradicional',
-    'Otro'
-  ));
 
 create index if not exists traditions_publication_date_idx
   on public.traditions (status, created_at desc);

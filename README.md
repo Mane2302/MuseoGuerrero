@@ -10,7 +10,6 @@ Museo digital educativo para explorar y documentar las tradiciones de Guerrero. 
 - Registro e inicio de sesión con Supabase Auth; las cuentas nuevas reciben el rol `student`.
 - Panel del estudiante para enviar fichas pendientes, consultar su estado, abrir la vista privada de sus envíos en otra pestaña y reenviar correcciones.
 - Autoría indicada en cada ficha, con nombre de persona, colectivo o comunidad mostrado junto al municipio y la región.
-- Actividad interdisciplinaria que compara la memoria de la Independencia en Guerrero con la tradición del Día de Muertos, con un apartado obligatorio para documentar el vínculo con fuentes.
 - Panel de moderación exclusivo del rol `admin`, con vista previa, edición, aprobación, rechazo, solicitud de cambios y eliminación.
 - Límite de 5 MB y formatos JPG, PNG y WebP en imágenes.
 - Modo demostración sin Supabase: utiliza fichas e ilustraciones locales marcadas como ejemplos; no guarda cuentas ni publicaciones.
@@ -36,13 +35,9 @@ Museo digital educativo para explorar y documentar las tradiciones de Guerrero. 
    No pongas la clave `service_role` en variables `NEXT_PUBLIC_*`, en el navegador ni en el repositorio. Esta aplicación no la necesita.
 5. Decide si exigir confirmación de correo en **Authentication → Providers → Email**. Si está activada, el estudiante debe confirmar su correo antes de iniciar sesión.
 
-Si ya habías aplicado una versión anterior del esquema, abre **Supabase → SQL Editor** y ejecuta las migraciones [`supabase/migrations/20261018_add_tradition_author.sql`](./supabase/migrations/20261018_add_tradition_author.sql) y [`supabase/migrations/20261018_add_activity_historical_connection.sql`](./supabase/migrations/20261018_add_activity_historical_connection.sql), en ese orden. La segunda agrega el apartado obligatorio **Vínculo entre la Independencia y el Día de Muertos**, habilita la categoría **Memoria histórica** y conserva las fichas existentes, indicando que deben completar el nuevo apartado. Espera unos segundos antes de volver a guardar fichas.
+Si ya habías aplicado una versión anterior del esquema, abre **Supabase → SQL Editor**, ejecuta el contenido completo de [`supabase/migrations/20261018_add_tradition_author.sql`](./supabase/migrations/20261018_add_tradition_author.sql) y espera unos segundos a que se recargue el esquema antes de volver a guardar fichas. La migración agrega el campo de autoría sin perder tus fichas y solicita a PostgREST actualizar su caché.
 
-Si aparece un error `Could not find the '...' column of 'traditions' in the schema cache` (para `tradition_author` o `historical_connection`), ejecuta las migraciones que falten en el mismo proyecto indicado por `NEXT_PUBLIC_SUPABASE_URL` y espera unos segundos; actualizar el código de la aplicación no cambia la base de datos.
-
-### Actividad: memoria histórica y Día de Muertos
-
-El propósito es vincular la memoria histórica de la Independencia de México en Guerrero con la tradición del Día de Muertos, para reconocer, valorar y difundir el patrimonio cultural, cívico e histórico que define la identidad nacional actual. Cada ficha debe describir el tema investigado, explicar su historia y significado cultural, y argumentar en **Vínculo entre la Independencia y el Día de Muertos** qué relación encontró el estudiante. Las afirmaciones deben apoyarse en fuentes; no se debe presentar una coincidencia o interpretación como un hecho histórico, y es válido concluir que no se encontró un vínculo directo.
+Si aparece `Could not find the 'tradition_author' column of 'traditions' in the schema cache`, esa migración aún no se ha ejecutado en el proyecto Supabase conectado, o el esquema todavía no se ha recargado. Ejecútala en el SQL Editor del mismo proyecto indicado por `NEXT_PUBLIC_SUPABASE_URL`; no basta con actualizar el código de la aplicación.
 
 ### Crear la primera cuenta administradora
 

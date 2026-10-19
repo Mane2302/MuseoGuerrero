@@ -17,7 +17,6 @@ export type Tradition = {
   description: string;
   history: string;
   cultural_significance: string;
-  historical_connection: string;
   image_path: string;
   sources: string[];
   status: TraditionStatus;
@@ -59,7 +58,6 @@ export interface Database {
           description: string;
           history: string;
           cultural_significance: string;
-          historical_connection: string;
           image_path?: string | null;
           sources: string[];
           status?: TraditionStatus;
@@ -80,7 +78,6 @@ export interface Database {
           description?: string;
           history?: string;
           cultural_significance?: string;
-          historical_connection?: string;
           image_path?: string | null;
           sources?: string[];
           status?: TraditionStatus;

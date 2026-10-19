@@ -213,7 +213,6 @@ export function TeacherDashboard({ userId }: { userId: string }) {
                 <p><strong>Descripción:</strong> {tradition.description}</p>
                 <p><strong>Historia:</strong> {tradition.history}</p>
                 <p><strong>Significado cultural:</strong> {tradition.cultural_significance}</p>
-                <p><strong>Independencia y Día de Muertos:</strong> {tradition.historical_connection}</p>
                 <p><strong>Fuentes:</strong> {tradition.sources.join(" · ")}</p>
                 {tradition.image_url && <div className="preview-image"><Image src={tradition.image_url} alt={`Imagen de ${tradition.title}`} width={640} height={360} unoptimized /></div>}
               </details>
