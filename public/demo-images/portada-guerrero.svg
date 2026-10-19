@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700">
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#e8c58d"/><stop offset="1" stop-color="#f6e7c9"/></linearGradient>
+    <linearGradient id="mountain" x2="0" y2="1"><stop stop-color="#668477"/><stop offset="1" stop-color="#284c3d"/></linearGradient>
+    <pattern id="weave" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M0 0h24v24H0z" fill="none"/><path d="M0 0l24 24M24 0L0 24" stroke="#a64d36" stroke-width="3" opacity=".62"/></pattern>
+  </defs>
+  <rect width="900" height="700" fill="url(#sky)"/>
+  <circle cx="704" cy="151" r="70" fill="#d29154" opacity=".84"/>
+  <path d="M0 411 205 193l123 126 186-212 195 228 104-112 87 87v390H0z" fill="url(#mountain)"/>
+  <path d="M0 473 178 291l150 140 185-172 181 191 99-78 107 94v234H0z" fill="#376451"/>
+  <path d="M0 531q154-91 302-11t279 0q155-82 319 22v158H0z" fill="#b35a3d"/>
+  <path d="M0 568h900v132H0z" fill="#d7a64e"/>
+  <path d="M0 584h900v116H0z" fill="url(#weave)" opacity=".8"/>
+  <path d="M86 467q59-58 121 0v119H86zM687 423q44-49 92 0v148h-92z" fill="#d9b56e"/>
+  <path d="M71 470q77-102 152 0M673 427q60-92 121 0" fill="none" stroke="#784937" stroke-width="13"/>
+  <g fill="#f5e7c8"><circle cx="147" cy="500" r="8"/><circle cx="723" cy="460" r="7"/><circle cx="764" cy="461" r="7"/></g>
+  <path d="M0 618h900" stroke="#f4e6c8" stroke-width="5" opacity=".8"/>
+</svg>
