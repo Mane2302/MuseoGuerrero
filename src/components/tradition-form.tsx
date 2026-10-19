@@ -16,19 +16,19 @@ export interface TraditionDraft {
   cultural_significance: null;
   celebration_origin_history: string | null;
   celebration_customs: string | null;
-  celebration_social_importance: string | null;
+  celebration_social_importance: null;
   celebration_conclusion: string | null;
-  interviewee_name: string | null;
+  interviewee_name: null;
   person_name: string | null;
   birth_date: string | null;
   birth_place: string | null;
   death_date: string | null;
   death_place: string | null;
   occupation: string | null;
-  biography_life_formation: string | null;
+  biography_life_formation: null;
   independence_participation: string | null;
   achievements: string | null;
-  legacy: string | null;
+  legacy: null;
   biography_summary: string | null;
   personal_conclusion: string | null;
   sources: string[];
@@ -48,21 +48,17 @@ export function TraditionForm({ initial, onSubmit, submitLabel, onCancel }: Trad
   const [traditionAuthor, setTraditionAuthor] = useState(initial?.tradition_author ?? "");
   const [originHistory, setOriginHistory] = useState(initial?.celebration_origin_history ?? "");
   const [customs, setCustoms] = useState(initial?.celebration_customs ?? "");
-  const [socialImportance, setSocialImportance] = useState(initial?.celebration_social_importance ?? "");
   const [celebrationConclusion, setCelebrationConclusion] = useState(initial?.celebration_conclusion ?? "");
-  const [intervieweeName, setIntervieweeName] = useState(initial?.interviewee_name ?? "");
   const [birthDate, setBirthDate] = useState(initial?.birth_date ?? "");
   const [birthPlace, setBirthPlace] = useState(initial?.birth_place ?? "");
   const [deathDate, setDeathDate] = useState(initial?.death_date ?? "");
   const [deathPlace, setDeathPlace] = useState(initial?.death_place ?? "");
   const [occupation, setOccupation] = useState(initial?.occupation ?? "");
-  const [lifeFormation, setLifeFormation] = useState(initial?.biography_life_formation ?? "");
   const [independenceParticipation, setIndependenceParticipation] = useState(initial?.independence_participation ?? "");
   const [achievements, setAchievements] = useState(initial?.achievements ?? "");
-  const [legacy, setLegacy] = useState(initial?.legacy ?? "");
   const [biographySummary, setBiographySummary] = useState(initial?.biography_summary ?? "");
   const [personalConclusion, setPersonalConclusion] = useState(initial?.personal_conclusion ?? "");
-  const [sources, setSources] = useState(initial?.sources.join("\n") ?? "");
+  const [sources, setSources] = useState(initial?.sources.join(", ") ?? "");
   const [image, setImage] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [saving, setSaving] = useState(false);
@@ -78,7 +74,7 @@ export function TraditionForm({ initial, onSubmit, submitLabel, onCancel }: Trad
       setErrorMessage(entryType === "celebration" ? "Agrega una fotografía o dibujo de la celebración." : "Agrega una imagen o retrato del personaje.");
       return;
     }
-    if (!sources.split("\n").some((source) => source.trim())) {
+    if (!splitSources(sources).length) {
       setErrorMessage("Agrega al menos una fuente consultada.");
       return;
     }
@@ -105,28 +101,32 @@ export function TraditionForm({ initial, onSubmit, submitLabel, onCancel }: Trad
         cultural_significance: null,
         celebration_origin_history: entryType === "celebration" ? originHistory.trim() : null,
         celebration_customs: entryType === "celebration" ? customs.trim() : null,
-        celebration_social_importance: entryType === "celebration" ? socialImportance.trim() : null,
+        celebration_social_importance: null,
         celebration_conclusion: entryType === "celebration" ? celebrationConclusion.trim() : null,
-        interviewee_name: entryType === "celebration" ? intervieweeName.trim() || null : null,
+        interviewee_name: null,
         person_name: entryType === "biography" ? title.trim() : null,
         birth_date: entryType === "biography" ? birthDate : null,
         birth_place: entryType === "biography" ? birthPlace.trim() : null,
         death_date: entryType === "biography" ? deathDate : null,
         death_place: entryType === "biography" ? deathPlace.trim() : null,
         occupation: entryType === "biography" ? occupation.trim() : null,
-        biography_life_formation: entryType === "biography" ? lifeFormation.trim() : null,
+        biography_life_formation: null,
         independence_participation: entryType === "biography" ? independenceParticipation.trim() : null,
         achievements: entryType === "biography" ? achievements.trim() : null,
-        legacy: entryType === "biography" ? legacy.trim() : null,
+        legacy: null,
         biography_summary: entryType === "biography" ? biographySummary.trim() : null,
         personal_conclusion: entryType === "biography" ? personalConclusion.trim() : null,
-        sources: sources.split("\n").map((source) => source.trim()).filter(Boolean),
+        sources: splitSources(sources),
       }, image);
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "No se pudo guardar la ficha.");
     } finally {
       setSaving(false);
     }
+  }
+
+  function splitSources(value: string) {
+    return value.split(/[,\n]/).map((source) => source.trim()).filter(Boolean);
   }
 
   const imageField = (
@@ -168,16 +168,13 @@ export function TraditionForm({ initial, onSubmit, submitLabel, onCancel }: Trad
               <label className="form-field"><span className="form-label">Nombre de la celebración</span><input className="form-input" required minLength={3} maxLength={140} value={title} onChange={(event) => setTitle(event.target.value)} /></label>
               <label className="form-field"><span className="form-label">Municipio donde se celebra</span><input className="form-input" required minLength={2} maxLength={100} value={municipality} onChange={(event) => setMunicipality(event.target.value)} /></label>
               <label className="form-field"><span className="form-label">Autor o autora de la ficha</span><input className="form-input" required minLength={2} maxLength={120} value={traditionAuthor} onChange={(event) => setTraditionAuthor(event.target.value)} placeholder="Tu nombre o el de tu equipo" /></label>
-              <h3 className="form-section-title">B. Origen e historia de la celebración</h3>
-              <label className="form-field"><span className="form-label">Origen e historia</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={originHistory} onChange={(event) => setOriginHistory(event.target.value)} /></label>
+              <h3 className="form-section-title">B. Historia de la celebración</h3>
+              <label className="form-field"><span className="form-label">Historia de la celebración</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={originHistory} onChange={(event) => setOriginHistory(event.target.value)} /></label>
               <h3 className="form-section-title">C. Costumbres y actividades tradicionales</h3>
-              <label className="form-field"><span className="form-label">Costumbres y actividades</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={customs} onChange={(event) => setCustoms(event.target.value)} placeholder="Describe las actividades, los espacios y los elementos que observaste o investigaste." /></label>
-              <h3 className="form-section-title">D. Participación e importancia social</h3>
-              <label className="form-field"><span className="form-label">Participación e importancia social</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={socialImportance} onChange={(event) => setSocialImportance(event.target.value)} /></label>
+              <label className="form-field"><span className="form-label">Costumbres y actividades tradicionales</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={customs} onChange={(event) => setCustoms(event.target.value)} placeholder="Describe las actividades, los espacios y los elementos que observaste o investigaste." /></label>
               <h3 className="form-section-title">E. Evidencias, fuentes y conclusión</h3>
               {imageField}
-              <label className="form-field"><span className="form-label">Nombre de la persona entrevistada (opcional)</span><input className="form-input" maxLength={120} value={intervieweeName} onChange={(event) => setIntervieweeName(event.target.value)} /><span className="form-hint">Pide permiso antes de compartir el nombre o el testimonio.</span></label>
-              <label className="form-field"><span className="form-label">Fuentes de información</span><textarea className="form-textarea" required value={sources} onChange={(event) => setSources(event.target.value)} placeholder={"Una fuente por línea: libro, página web, documento o testimonio"} /></label>
+              <label className="form-field"><span className="form-label">Fuentes consultadas</span><textarea className="form-textarea" required value={sources} onChange={(event) => setSources(event.target.value)} placeholder="Escribe una o varias fuentes separadas por comas." /></label>
               <label className="form-field"><span className="form-label">Conclusión: ¿qué aprendiste sobre esta tradición y por qué es importante conservarla?</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={celebrationConclusion} onChange={(event) => setCelebrationConclusion(event.target.value)} /></label>
             </>
           ) : (
@@ -194,18 +191,14 @@ export function TraditionForm({ initial, onSubmit, submitLabel, onCancel }: Trad
               <label className="form-field"><span className="form-label">Municipio de Guerrero relacionado con el personaje</span><input className="form-input" required minLength={2} maxLength={100} value={municipality} onChange={(event) => setMunicipality(event.target.value)} /></label>
               <label className="form-field"><span className="form-label">Autor o autora de la ficha</span><input className="form-input" required minLength={2} maxLength={120} value={traditionAuthor} onChange={(event) => setTraditionAuthor(event.target.value)} placeholder="Tu nombre o el de tu equipo" /></label>
               {imageField}
-              <h3 className="form-section-title">B. Vida personal y formación</h3>
-              <label className="form-field"><span className="form-label">Vida personal y formación</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={lifeFormation} onChange={(event) => setLifeFormation(event.target.value)} /></label>
-              <h3 className="form-section-title">C. Participación en la Independencia de México</h3>
+              <h3 className="form-section-title">B. Participación en la Independencia de México</h3>
               <label className="form-field"><span className="form-label">Participación en la Independencia</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={independenceParticipation} onChange={(event) => setIndependenceParticipation(event.target.value)} /></label>
-              <h3 className="form-section-title">D. Logros y aportaciones</h3>
+              <h3 className="form-section-title">C. Logros y aportaciones</h3>
               <label className="form-field"><span className="form-label">Logros y aportaciones</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={achievements} onChange={(event) => setAchievements(event.target.value)} /></label>
-              <h3 className="form-section-title">E. Legado e importancia histórica</h3>
-              <label className="form-field"><span className="form-label">Legado e importancia histórica</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={legacy} onChange={(event) => setLegacy(event.target.value)} /></label>
-              <h3 className="form-section-title">F. Síntesis y fuentes</h3>
+              <h3 className="form-section-title">D. Síntesis y fuentes</h3>
               <label className="form-field"><span className="form-label">Resumen de su vida: ¿quién fue, qué hizo y por qué es importante?</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={biographySummary} onChange={(event) => setBiographySummary(event.target.value)} /></label>
               <label className="form-field"><span className="form-label">Conclusión personal: ¿por qué merece ser recordado?</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={personalConclusion} onChange={(event) => setPersonalConclusion(event.target.value)} /></label>
-              <label className="form-field"><span className="form-label">Fuentes de información</span><textarea className="form-textarea" required value={sources} onChange={(event) => setSources(event.target.value)} placeholder={"Una fuente por línea: libro, documento, página web o material consultado"} /></label>
+              <label className="form-field"><span className="form-label">Fuentes consultadas</span><textarea className="form-textarea" required value={sources} onChange={(event) => setSources(event.target.value)} placeholder="Escribe una o varias fuentes separadas por comas." /></label>
             </>
           )}
         </>

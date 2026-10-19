@@ -7,7 +7,7 @@ Museo digital educativo centrado en las celebraciones del Día de Muertos en los
 - Catálogo público de fichas **aprobadas**, con búsqueda y filtro por municipio.
 - Carrusel de portada con celebraciones municipales del Día de Muertos y personajes de la Independencia.
 - Dos formatos de ficha para elegir: celebración municipal del Día de Muertos o ficha biográfica de un personaje de la Independencia.
-- Fichas públicas con historia, costumbres, participación social, información biográfica, conclusiones y fuentes según el formato elegido.
+- Fichas públicas con historia, costumbres, información biográfica, conclusiones y fuentes según el formato elegido; los retratos se muestran completos.
 - Registro e inicio de sesión con Supabase Auth; las cuentas nuevas reciben el rol `student`.
 - Panel del estudiante para enviar fichas pendientes, consultar su estado, abrir la vista privada de sus envíos en otra pestaña y reenviar correcciones.
 - Autoría indicada en cada ficha, mostrada junto al municipio.
@@ -36,9 +36,9 @@ Museo digital educativo centrado en las celebraciones del Día de Muertos en los
    No pongas la clave `service_role` en variables `NEXT_PUBLIC_*`, en el navegador ni en el repositorio. Esta aplicación no la necesita.
 5. Decide si exigir confirmación de correo en **Authentication → Providers → Email**. Si está activada, el estudiante debe confirmar su correo antes de iniciar sesión.
 
-Si ya habías aplicado una versión anterior del esquema, abre **Supabase → SQL Editor** y ejecuta las migraciones necesarias en orden: [`supabase/migrations/20261018_add_tradition_author.sql`](./supabase/migrations/20261018_add_tradition_author.sql) para añadir la autoría si todavía no está, luego [`supabase/migrations/20261019_add_entry_types.sql`](./supabase/migrations/20261019_add_entry_types.sql) para habilitar los dos formatos nuevos.
+Si ya habías aplicado una versión anterior del esquema, abre **Supabase → SQL Editor** y ejecuta las migraciones necesarias en orden: [`supabase/migrations/20261018_add_tradition_author.sql`](./supabase/migrations/20261018_add_tradition_author.sql) para añadir la autoría si todavía no está, [`supabase/migrations/20261019_add_entry_types.sql`](./supabase/migrations/20261019_add_entry_types.sql) para habilitar los dos formatos nuevos y [`supabase/migrations/20261019_adjust_entry_sections.sql`](./supabase/migrations/20261019_adjust_entry_sections.sql) para retirar de la validación los apartados eliminados.
 
-La migración de formatos conserva el contenido anterior, prepara los campos nuevos y devuelve las fichas anteriores a estado **pendiente** para que se actualicen y revisen antes de publicarse con el nuevo formato. Espera unos segundos para que PostgREST recargue el esquema antes de volver a guardar fichas. Ejecuta las migraciones en el proyecto indicado por `NEXT_PUBLIC_SUPABASE_URL`; actualizar el código no modifica la base de datos.
+La migración de formatos conserva el contenido anterior, prepara los campos nuevos y devuelve las fichas anteriores a estado **pendiente** para que se actualicen y revisen antes de publicarse con el nuevo formato. La migración de apartados conserva también los valores históricos de las secciones retiradas, pero permite guardar las fichas sin volver a pedirlos. Espera unos segundos para que PostgREST recargue el esquema antes de volver a guardar fichas. Ejecuta las migraciones en el proyecto indicado por `NEXT_PUBLIC_SUPABASE_URL`; actualizar el código no modifica la base de datos.
 
 ### Crear la primera cuenta administradora
 
@@ -73,7 +73,7 @@ Abre [http://localhost:3000](http://localhost:3000). Sin `.env.local`, la portad
 ## Probar el flujo
 
 1. Registra una cuenta de estudiante e inicia sesión en `/alumno`.
-2. Elige uno de los formatos. Completa sus apartados, agrega una imagen JPG/PNG/WebP menor de 5 MB y al menos una fuente. Verifica que aparece como **En revisión** y no en la colección pública.
+2. Elige uno de los formatos. Completa sus apartados, agrega una imagen JPG/PNG/WebP menor de 5 MB y al menos una fuente (puedes separar varias con comas). Verifica que aparece como **En revisión** y no en la colección pública.
 3. Inicia sesión con la cuenta administradora y abre `/profesor`. Comprueba la vista previa; prueba solicitar correcciones (requiere nota), editar y aprobar.
 4. Vuelve a la sesión del estudiante. La nota y el estado deben aparecer; al editar una ficha con cambios solicitados, debe volver a revisión.
 5. Tras aprobarla, comprueba que aparece en la portada y en su detalle. Prueba también el rechazo y la eliminación desde el panel docente.

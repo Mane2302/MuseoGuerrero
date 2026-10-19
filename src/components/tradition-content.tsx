@@ -12,18 +12,16 @@ export function TraditionContent({ tradition }: { tradition: Tradition }) {
   if (tradition.entry_type === "celebration") {
     return (
       <div className="detail-copy">
-        <section><h2>Origen e historia de la celebración</h2><p>{tradition.celebration_origin_history}</p></section>
+        <section><h2>Historia de la celebración</h2><p>{tradition.celebration_origin_history}</p></section>
         <section><h2>Costumbres y actividades tradicionales</h2><p>{tradition.celebration_customs}</p></section>
-        <section><h2>Participación e importancia social</h2><p>{tradition.celebration_social_importance}</p></section>
         <section><h2>Conclusión</h2><p>{tradition.celebration_conclusion}</p></section>
-        {tradition.interviewee_name && <section><h2>Persona entrevistada</h2><p>{tradition.interviewee_name}</p></section>}
-        <section><h2>Fuentes de información</h2><ul className="source-list">{tradition.sources.map((source, index) => <li key={`${index}-${source}`}>{source}</li>)}</ul></section>
+        <section><h2>Fuentes consultadas</h2><ul className="source-list">{tradition.sources.map((source, index) => <li key={`${index}-${source}`}>{source}</li>)}</ul></section>
       </div>
     );
   }
 
   return (
-    <div className="detail-copy">
+    <div className="detail-copy biography-copy">
       <section>
         <h2>Datos de identificación</h2>
         <dl className="biography-facts">
@@ -35,13 +33,11 @@ export function TraditionContent({ tradition }: { tradition: Tradition }) {
           <div><dt>Ocupación o actividad principal</dt><dd>{tradition.occupation}</dd></div>
         </dl>
       </section>
-      <section><h2>Vida personal y formación</h2><p>{tradition.biography_life_formation}</p></section>
       <section><h2>Participación en la Independencia de México</h2><p>{tradition.independence_participation}</p></section>
       <section><h2>Logros y aportaciones</h2><p>{tradition.achievements}</p></section>
-      <section><h2>Legado e importancia histórica</h2><p>{tradition.legacy}</p></section>
       <section><h2>Síntesis de su vida</h2><p>{tradition.biography_summary}</p></section>
       <section><h2>Conclusión personal</h2><p>{tradition.personal_conclusion}</p></section>
-      <section><h2>Fuentes de información</h2><ul className="source-list">{tradition.sources.map((source, index) => <li key={`${index}-${source}`}>{source}</li>)}</ul></section>
+      <section><h2>Fuentes consultadas</h2><ul className="source-list">{tradition.sources.map((source, index) => <li key={`${index}-${source}`}>{source}</li>)}</ul></section>
     </div>
   );
 }

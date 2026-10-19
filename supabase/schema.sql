@@ -160,9 +160,7 @@ alter table public.traditions
         entry_type = 'celebration'
         and char_length(celebration_origin_history) between 20 and 2000
         and char_length(celebration_customs) between 20 and 2000
-        and char_length(celebration_social_importance) between 20 and 2000
         and char_length(celebration_conclusion) between 20 and 2000
-        and (interviewee_name is null or char_length(interviewee_name) between 2 and 120)
       )
       or
       (
@@ -174,10 +172,8 @@ alter table public.traditions
         and death_date is not null
         and char_length(death_place) between 2 and 160
         and char_length(occupation) between 2 and 160
-        and char_length(biography_life_formation) between 20 and 2000
         and char_length(independence_participation) between 20 and 2000
         and char_length(achievements) between 20 and 2000
-        and char_length(legacy) between 20 and 2000
         and char_length(biography_summary) between 20 and 2000
         and char_length(personal_conclusion) between 20 and 2000
       ),
