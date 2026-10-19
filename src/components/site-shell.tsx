@@ -10,7 +10,7 @@ export function SiteHeader() {
       </Link>
       <nav className="header-nav" aria-label="Navegación principal">
         <Link href="/#coleccion">La colección</Link>
-        <Link href="/#coleccion">Regiones</Link>
+        <Link href="/#coleccion">Municipios</Link>
         <Link className="nav-cta" href="/login">Aula y comunidad <span aria-hidden="true">↗</span></Link>
       </nav>
     </header>

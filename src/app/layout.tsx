@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     template: "%s | Ecos de Guerrero",
   },
   description:
-    "Explora y comparte las tradiciones, los saberes y las historias de las siete regiones de Guerrero.",
+    "Documenta las celebraciones del Día de Muertos en los municipios de Guerrero y conoce a personajes de la Independencia de México.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

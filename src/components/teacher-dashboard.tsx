@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TraditionForm, type TraditionDraft } from "@/components/tradition-form";
+import { TraditionContent } from "@/components/tradition-content";
+import { getEntryTypeLabel } from "@/lib/entry-content";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
 import type { Tradition, TraditionStatus } from "@/lib/types";
 
@@ -203,17 +205,13 @@ export function TeacherDashboard({ userId }: { userId: string }) {
           {visible.map((tradition) => (
             <article className="submission-card" key={tradition.id}>
               <div className="submission-top">
-                <div><h3>{tradition.title}</h3><p className="submission-meta">Por {authorNames[tradition.author_id] ?? "Estudiante"} · {tradition.municipality} · {tradition.region} · Enviada {formatDate(tradition.created_at)} · Modificada {formatDate(tradition.updated_at)}</p></div>
+                <div><h3>{tradition.title}</h3><p className="submission-meta">{getEntryTypeLabel(tradition.entry_type)} · Por {authorNames[tradition.author_id] ?? "Estudiante"} · {tradition.municipality} · Enviada {formatDate(tradition.created_at)} · Modificada {formatDate(tradition.updated_at)}</p></div>
                 <span className={`status-badge status-${tradition.status}`}>{statusLabels[tradition.status]}</span>
               </div>
               <details className="preview-details">
                 <summary>Vista previa de la ficha</summary>
-                <p><strong>Categoría:</strong> {tradition.category}</p>
                 <p><strong>Autor o autora:</strong> {tradition.tradition_author}</p>
-                <p><strong>Descripción:</strong> {tradition.description}</p>
-                <p><strong>Historia:</strong> {tradition.history}</p>
-                <p><strong>Significado cultural:</strong> {tradition.cultural_significance}</p>
-                <p><strong>Fuentes:</strong> {tradition.sources.join(" · ")}</p>
+                <TraditionContent tradition={tradition} />
                 {tradition.image_url && <div className="preview-image"><Image src={tradition.image_url} alt={`Imagen de ${tradition.title}`} width={640} height={360} unoptimized /></div>}
               </details>
               <label className="form-field review-note-field">

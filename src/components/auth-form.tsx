@@ -67,7 +67,7 @@ export function AuthForm() {
   return (
     <section className="auth-card">
       <h2>{mode === "login" ? "Qué gusto verte" : "Únete a la comunidad"}</h2>
-      <p>{mode === "login" ? "Ingresa a tu espacio para continuar con tus historias." : "Crea una cuenta de estudiante para compartir una ficha cultural."}</p>
+      <p>{mode === "login" ? "Ingresa a tu espacio para continuar con tus fichas." : "Crea una cuenta de estudiante para documentar una celebración o personaje histórico."}</p>
       <form className="form-stack" onSubmit={submit}>
         {mode === "signup" && (
           <label className="form-field">

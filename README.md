@@ -1,15 +1,16 @@
 # Ecos de Guerrero: De la Patria a la Eternidad
 
-Museo digital educativo para explorar y documentar las tradiciones de Guerrero. El proyecto usa Next.js, TypeScript, Tailwind CSS y Supabase. Las imágenes de las fichas se guardan en un bucket privado y solo se muestran mediante URL firmadas conforme a las políticas RLS.
+Museo digital educativo centrado en las celebraciones del Día de Muertos en los municipios de Guerrero y las biografías de personajes de la Independencia de México. Usa Next.js, TypeScript, Tailwind CSS y Supabase. Las imágenes se guardan en un bucket privado y solo se muestran mediante URL firmadas conforme a las políticas RLS.
 
 ## Funcionalidades
 
-- Catálogo público de fichas **aprobadas**, con búsqueda y filtros por municipio, región y categoría.
-- Carrusel de portada que recorre automáticamente las tradiciones aprobadas.
-- Detalle público con historia, significado cultural y fuentes consultadas.
+- Catálogo público de fichas **aprobadas**, con búsqueda y filtro por municipio.
+- Carrusel de portada con celebraciones municipales del Día de Muertos y personajes de la Independencia.
+- Dos formatos de ficha para elegir: celebración municipal del Día de Muertos o ficha biográfica de un personaje de la Independencia.
+- Fichas públicas con historia, costumbres, participación social, información biográfica, conclusiones y fuentes según el formato elegido.
 - Registro e inicio de sesión con Supabase Auth; las cuentas nuevas reciben el rol `student`.
 - Panel del estudiante para enviar fichas pendientes, consultar su estado, abrir la vista privada de sus envíos en otra pestaña y reenviar correcciones.
-- Autoría indicada en cada ficha, con nombre de persona, colectivo o comunidad mostrado junto al municipio y la región.
+- Autoría indicada en cada ficha, mostrada junto al municipio.
 - Panel de moderación exclusivo del rol `admin`, con vista previa, edición, aprobación, rechazo, solicitud de cambios y eliminación.
 - Límite de 5 MB y formatos JPG, PNG y WebP en imágenes.
 - Modo demostración sin Supabase: utiliza fichas e ilustraciones locales marcadas como ejemplos; no guarda cuentas ni publicaciones.
@@ -35,9 +36,9 @@ Museo digital educativo para explorar y documentar las tradiciones de Guerrero. 
    No pongas la clave `service_role` en variables `NEXT_PUBLIC_*`, en el navegador ni en el repositorio. Esta aplicación no la necesita.
 5. Decide si exigir confirmación de correo en **Authentication → Providers → Email**. Si está activada, el estudiante debe confirmar su correo antes de iniciar sesión.
 
-Si ya habías aplicado una versión anterior del esquema, abre **Supabase → SQL Editor**, ejecuta el contenido completo de [`supabase/migrations/20261018_add_tradition_author.sql`](./supabase/migrations/20261018_add_tradition_author.sql) y espera unos segundos a que se recargue el esquema antes de volver a guardar fichas. La migración agrega el campo de autoría sin perder tus fichas y solicita a PostgREST actualizar su caché.
+Si ya habías aplicado una versión anterior del esquema, abre **Supabase → SQL Editor** y ejecuta las migraciones necesarias en orden: [`supabase/migrations/20261018_add_tradition_author.sql`](./supabase/migrations/20261018_add_tradition_author.sql) para añadir la autoría si todavía no está, luego [`supabase/migrations/20261019_add_entry_types.sql`](./supabase/migrations/20261019_add_entry_types.sql) para habilitar los dos formatos nuevos.
 
-Si aparece `Could not find the 'tradition_author' column of 'traditions' in the schema cache`, esa migración aún no se ha ejecutado en el proyecto Supabase conectado, o el esquema todavía no se ha recargado. Ejecútala en el SQL Editor del mismo proyecto indicado por `NEXT_PUBLIC_SUPABASE_URL`; no basta con actualizar el código de la aplicación.
+La migración de formatos conserva el contenido anterior, prepara los campos nuevos y devuelve las fichas anteriores a estado **pendiente** para que se actualicen y revisen antes de publicarse con el nuevo formato. Espera unos segundos para que PostgREST recargue el esquema antes de volver a guardar fichas. Ejecuta las migraciones en el proyecto indicado por `NEXT_PUBLIC_SUPABASE_URL`; actualizar el código no modifica la base de datos.
 
 ### Crear la primera cuenta administradora
 
@@ -67,18 +68,18 @@ Copy-Item .env.example .env.local
 npm run dev
 ```
 
-Abre [http://localhost:3000](http://localhost:3000). Sin `.env.local`, la portada muestra el catálogo demostrativo; el registro y los paneles no guardan ni simulan cambios.
+Abre [http://localhost:3000](http://localhost:3000). Sin `.env.local`, la portada muestra fichas demostrativas centradas en los dos formatos; el registro y los paneles no guardan ni simulan cambios.
 
 ## Probar el flujo
 
 1. Registra una cuenta de estudiante e inicia sesión en `/alumno`.
-2. Crea una ficha con todos los campos, una imagen JPG/PNG/WebP menor de 5 MB y al menos una fuente. Verifica que aparece como **En revisión** y no en la colección pública.
+2. Elige uno de los formatos. Completa sus apartados, agrega una imagen JPG/PNG/WebP menor de 5 MB y al menos una fuente. Verifica que aparece como **En revisión** y no en la colección pública.
 3. Inicia sesión con la cuenta administradora y abre `/profesor`. Comprueba la vista previa; prueba solicitar correcciones (requiere nota), editar y aprobar.
 4. Vuelve a la sesión del estudiante. La nota y el estado deben aparecer; al editar una ficha con cambios solicitados, debe volver a revisión.
 5. Tras aprobarla, comprueba que aparece en la portada y en su detalle. Prueba también el rechazo y la eliminación desde el panel docente.
 6. Confirma que una sesión anónima no puede leer fichas pendientes y que un estudiante no puede leer ni editar fichas de otra persona. Las políticas SQL, no la interfaz, imponen estas restricciones.
 
-Para cargar ejemplos demostrativos en tu base de datos (opcional), crea primero una cuenta administradora y ejecuta [`supabase/seed_demo.sql`](./supabase/seed_demo.sql). Las fichas incluyen `DEMO` en el título y referencias de muestra; sus ilustraciones SVG se sirven desde la aplicación y no se suben a Storage. Verifica la información y reemplaza las fuentes antes de usarla en clase.
+Para cargar un ejemplo demostrativo en tu base de datos (opcional), crea primero una cuenta administradora y ejecuta [`supabase/seed_demo.sql`](./supabase/seed_demo.sql). La ficha lleva `DEMO` en el título y sus apartados indican que se deben completar; su ilustración se sirve desde la aplicación y no se sube a Storage. Sustituye el ejemplo por investigación local antes de usarlo en clase.
 
 ## Despliegue en Vercel
 

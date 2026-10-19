@@ -82,6 +82,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .section-heading h2, .contribute-banner h2 { margin: 0; font: 400 clamp(30px,3vw,42px)/1.12 Georgia,serif; letter-spacing: -1px; }
 .section-heading > p { max-width: 305px; margin: 0 0 4px; color: #70766e; font-size: 12px; line-height: 1.7; }
 .catalog-tools { margin: 0 0 26px; padding: 16px; display: grid; grid-template-columns: minmax(220px,1.6fr) repeat(3,minmax(125px,1fr)); gap: 11px; border: 1px solid var(--line); background: #fbfaf6; }
+.catalog-tools-municipality { grid-template-columns: minmax(220px,1.6fr) minmax(180px,1fr); }
 .search-field, .filter-select { height: 42px; width: 100%; border: 1px solid #e4e2d9; border-radius: 2px; outline: none; background: #fff; color: var(--ink); font-size: 11px; }
 .search-field { padding: 0 13px; }
 .filter-select { padding: 0 10px; }
@@ -92,7 +93,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
 .image-placeholder { width: 100%; height: 100%; background: radial-gradient(circle at 70% 28%,#d6b66b 0 9%,transparent 10%),linear-gradient(145deg,#d6caa9 0 34%,#769082 35% 59%,#24483d 60%); }
 .tradition-card:hover .card-image img { transform: scale(1.035); }
-.category-tag { position: absolute; top: 14px; left: 14px; padding: 7px 9px; background: rgba(248,246,240,.94); color: var(--green); font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.entry-type-tag { position: absolute; top: 14px; left: 14px; padding: 7px 9px; background: rgba(248,246,240,.94); color: var(--green); font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
 .demo-tag { position: absolute; right: 11px; bottom: 11px; padding: 6px 8px; background: rgba(32,41,35,.82); color: white; font-size: 8px; letter-spacing: .4px; }
 .card-content { padding: 18px 18px 20px; }
 .card-location { margin: 0 0 9px; color: var(--clay); font-size: 9px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase; }
@@ -129,6 +130,16 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .auth-card h2 { margin: 0 0 8px; font: 400 26px Georgia,serif; }
 .auth-card > p { margin: 0 0 23px; color: var(--muted); font-size: 11px; line-height: 1.6; }
 .form-stack { display: grid; gap: 15px; }
+.entry-type-fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.entry-type-fieldset legend { margin-bottom: 9px; padding: 0; }
+.entry-type-options { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.entry-type-option { min-height: 90px; padding: 14px; border: 1px solid #dfddd4; background: #fffefa; color: var(--ink); cursor: pointer; text-align: left; }
+.entry-type-option strong, .entry-type-option span { display: block; }
+.entry-type-option strong { margin-bottom: 6px; color: var(--green); font: 600 15px Georgia,serif; }
+.entry-type-option span { color: var(--muted); font-size: 11px; line-height: 1.5; }
+.entry-type-option:hover, .entry-type-option.is-selected { border-color: var(--green); background: #f0f3ed; }
+.entry-type-option:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.form-section-title { margin: 8px 0 0; padding-bottom: 7px; border-bottom: 1px solid var(--line); color: var(--green); font: 400 19px Georgia,serif; }
 .form-field { display: grid; gap: 7px; }
 .form-label { color: #4c554d; font-size: 10px; font-weight: 700; }
 .form-input, .form-select, .form-textarea { width: 100%; padding: 11px 12px; border: 1px solid #dfddd4; border-radius: 2px; outline: none; background: white; color: var(--ink); font-size: 12px; }
@@ -168,11 +179,16 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .detail-copy { display: grid; grid-template-columns: 1fr 1fr; gap: 35px; }
 .detail-copy h2 { margin: 0 0 10px; font: 400 22px Georgia,serif; }
 .detail-copy p { margin: 0; color: #60675f; font-size: 13px; line-height: 1.8; white-space: pre-line; }
+.detail-copy .biography-facts { margin: 0; display: grid; gap: 9px; }
+.biography-facts > div { display: grid; grid-template-columns: minmax(130px,.8fr) 1.2fr; gap: 12px; font-size: 12px; line-height: 1.6; }
+.biography-facts dt { color: var(--muted); font-weight: 700; }
+.biography-facts dd { margin: 0; color: #60675f; }
 .student-preview-title { margin-top: 13px !important; }
 .source-list { margin: 11px 0; padding-left: 18px; color: #60675f; font-size: 12px; line-height: 1.8; }
 .preview-details { margin-top: 16px; padding: 12px; border: 1px solid #e7e3d8; background: #fbfaf6; color: #5e665e; font-size: 11px; line-height: 1.65; }
 .preview-details summary { color: var(--green); cursor: pointer; font-weight: 700; }
 .preview-details p { margin: 11px 0 0; }
+.preview-details .detail-copy { grid-template-columns: 1fr; gap: 18px; }
 .preview-image { max-width: 640px; margin-top: 14px; }
 .preview-image img { width: 100%; height: auto; }
 .current-image { width: fit-content; overflow: hidden; background: var(--paper-deep); }
@@ -194,6 +210,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .hero-copy h1 { letter-spacing: -2px; }
   .collection-section { padding: 69px 0 80px; }
   .catalog-tools { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .catalog-tools-municipality { grid-template-columns: 1fr 1fr; }
+  .entry-type-options { grid-template-columns: 1fr; }
 }
 @media (max-width: 620px) {
   .site-header { padding: 0 17px; }

@@ -3,13 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { categories, regions } from "@/lib/demo-data";
+import { getEntrySummary, getEntryTypeLabel } from "@/lib/entry-content";
 import type { Tradition } from "@/lib/types";
 
 export function Catalog({ traditions }: { traditions: Tradition[] }) {
   const [query, setQuery] = useState("");
-  const [region, setRegion] = useState("");
-  const [category, setCategory] = useState("");
   const [municipality, setMunicipality] = useState("");
 
   const municipalities = useMemo(
@@ -23,42 +21,31 @@ export function Catalog({ traditions }: { traditions: Tradition[] }) {
         !normalizedQuery ||
         [
           tradition.title,
-          tradition.category,
           tradition.municipality,
-          tradition.region,
-          tradition.description,
+          getEntryTypeLabel(tradition.entry_type),
+          getEntrySummary(tradition),
         ]
           .join(" ")
           .toLocaleLowerCase("es")
           .includes(normalizedQuery);
       return (
         matchesQuery &&
-        (!region || tradition.region === region) &&
-        (!category || tradition.category === category) &&
         (!municipality || tradition.municipality === municipality)
       );
     });
-  }, [category, municipality, query, region, traditions]);
+  }, [municipality, query, traditions]);
 
   return (
     <>
-      <div className="catalog-tools" aria-label="Buscar y filtrar tradiciones">
+      <div className="catalog-tools catalog-tools-municipality" aria-label="Buscar y filtrar fichas">
         <input
           className="search-field"
           type="search"
-          placeholder="Busca una tradición, oficio o palabra…"
+          placeholder="Busca una celebración, personaje o municipio…"
           aria-label="Buscar en la colección"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
         />
-        <select className="filter-select" aria-label="Filtrar por región" value={region} onChange={(event) => setRegion(event.target.value)}>
-          <option value="">Todas las regiones</option>
-          {regions.map((item) => <option key={item}>{item}</option>)}
-        </select>
-        <select className="filter-select" aria-label="Filtrar por categoría" value={category} onChange={(event) => setCategory(event.target.value)}>
-          <option value="">Todas las categorías</option>
-          {categories.map((item) => <option key={item}>{item}</option>)}
-        </select>
         <select className="filter-select" aria-label="Filtrar por municipio" value={municipality} onChange={(event) => setMunicipality(event.target.value)}>
           <option value="">Todos los municipios</option>
           {municipalities.map((item) => <option key={item}>{item}</option>)}
@@ -80,15 +67,15 @@ export function Catalog({ traditions }: { traditions: Tradition[] }) {
                     unoptimized
                   />
                 ) : <div className="image-placeholder" aria-hidden="true" />}
-                <span className="category-tag">{tradition.category}</span>
+                <span className="entry-type-tag">{getEntryTypeLabel(tradition.entry_type)}</span>
                 {tradition.is_demo && <span className="demo-tag">Ejemplo de demostración</span>}
               </div>
               <div className="card-content">
-                <p className="card-location">{tradition.municipality} · {tradition.region}</p>
+                <p className="card-location">{tradition.municipality}</p>
                 <p className="card-author">Por {tradition.tradition_author}</p>
                 <h3>{tradition.title}</h3>
-                <p>{tradition.description}</p>
-                <span className="card-link">Conocer la historia <span aria-hidden="true">→</span></span>
+                <p>{getEntrySummary(tradition)}</p>
+                <span className="card-link">Abrir ficha <span aria-hidden="true">→</span></span>
               </div>
             </Link>
           </article>

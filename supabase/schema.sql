@@ -33,18 +33,11 @@ create table if not exists public.traditions (
   id uuid primary key default gen_random_uuid(),
   author_id uuid not null references public.profiles (id) on delete cascade,
   title text not null check (char_length(title) between 3 and 140),
-  category text not null check (category in (
-    'Artesanía',
-    'Danza',
-    'Gastronomía',
-    'Lengua',
-    'Música',
-    'Fiesta y celebración',
-    'Conocimiento tradicional',
-    'Otro'
-  )),
+  entry_type text not null default 'celebration'
+    check (entry_type in ('celebration', 'biography')),
+  category text,
   municipality text not null check (char_length(municipality) between 2 and 100),
-  region text not null check (region in (
+  region text check (region in (
     'Acapulco',
     'Centro',
     'Costa Chica',
@@ -55,9 +48,26 @@ create table if not exists public.traditions (
   )),
   tradition_author text not null constraint traditions_tradition_author_length
     check (char_length(tradition_author) between 2 and 120),
-  description text not null check (char_length(description) between 20 and 1200),
-  history text not null check (char_length(history) between 20 and 2000),
-  cultural_significance text not null check (char_length(cultural_significance) between 20 and 2000),
+  description text,
+  history text,
+  cultural_significance text,
+  celebration_origin_history text,
+  celebration_customs text,
+  celebration_social_importance text,
+  celebration_conclusion text,
+  interviewee_name text,
+  person_name text,
+  birth_date date,
+  birth_place text,
+  death_date date,
+  death_place text,
+  occupation text,
+  biography_life_formation text,
+  independence_participation text,
+  achievements text,
+  legacy text,
+  biography_summary text,
+  personal_conclusion text,
   image_path text not null,
   sources text[] not null check (cardinality(sources) > 0),
   status public.tradition_status not null default 'pending',
@@ -70,6 +80,117 @@ create table if not exists public.traditions (
 
 alter table public.traditions
   add column if not exists tradition_author text not null default 'Autoría sin registrar';
+
+alter table public.traditions
+  add column if not exists entry_type text not null default 'celebration';
+
+alter table public.traditions
+  add column if not exists celebration_origin_history text,
+  add column if not exists celebration_customs text,
+  add column if not exists celebration_social_importance text,
+  add column if not exists celebration_conclusion text,
+  add column if not exists interviewee_name text,
+  add column if not exists person_name text,
+  add column if not exists birth_date date,
+  add column if not exists birth_place text,
+  add column if not exists death_date date,
+  add column if not exists death_place text,
+  add column if not exists occupation text,
+  add column if not exists biography_life_formation text,
+  add column if not exists independence_participation text,
+  add column if not exists achievements text,
+  add column if not exists legacy text,
+  add column if not exists biography_summary text,
+  add column if not exists personal_conclusion text;
+
+alter table public.traditions
+  alter column category drop not null,
+  alter column region drop not null,
+  alter column description drop not null,
+  alter column history drop not null,
+  alter column cultural_significance drop not null;
+
+alter table public.traditions
+  drop constraint if exists traditions_category_check;
+
+update public.traditions
+set celebration_origin_history = coalesce(
+      celebration_origin_history,
+      'Registro anterior: completar con el origen y la historia de la celebración del Día de Muertos en este municipio.'
+    ),
+    celebration_customs = coalesce(
+      celebration_customs,
+      'Registro anterior: investigar y documentar las costumbres y actividades tradicionales del Día de Muertos en este municipio.'
+    ),
+    celebration_social_importance = coalesce(
+      celebration_social_importance,
+      'Registro anterior: explicar la participación de la comunidad y la importancia social de esta celebración.'
+    ),
+    celebration_conclusion = coalesce(
+      celebration_conclusion,
+      'Registro anterior: concluir qué se aprendió y por qué es importante conservar esta celebración.'
+    ),
+    status = 'pending'::public.tradition_status,
+    review_note = null,
+    reviewer_id = null,
+    reviewed_at = null
+where entry_type = 'celebration'
+  and (
+    celebration_origin_history is null
+    or celebration_customs is null
+    or celebration_social_importance is null
+    or celebration_conclusion is null
+  );
+
+alter table public.traditions
+  drop constraint if exists traditions_entry_type_check;
+
+alter table public.traditions
+  add constraint traditions_entry_type_check
+  check (entry_type in ('celebration', 'biography'));
+
+alter table public.traditions
+  drop constraint if exists traditions_entry_content_check;
+
+alter table public.traditions
+  add constraint traditions_entry_content_check
+  check (
+    coalesce(
+      (
+        entry_type = 'celebration'
+        and char_length(celebration_origin_history) between 20 and 2000
+        and char_length(celebration_customs) between 20 and 2000
+        and char_length(celebration_social_importance) between 20 and 2000
+        and char_length(celebration_conclusion) between 20 and 2000
+        and (interviewee_name is null or char_length(interviewee_name) between 2 and 120)
+      )
+      or
+      (
+        entry_type = 'biography'
+        and title = person_name
+        and char_length(person_name) between 3 and 140
+        and birth_date is not null
+        and char_length(birth_place) between 2 and 160
+        and death_date is not null
+        and char_length(death_place) between 2 and 160
+        and char_length(occupation) between 2 and 160
+        and char_length(biography_life_formation) between 20 and 2000
+        and char_length(independence_participation) between 20 and 2000
+        and char_length(achievements) between 20 and 2000
+        and char_length(legacy) between 20 and 2000
+        and char_length(biography_summary) between 20 and 2000
+        and char_length(personal_conclusion) between 20 and 2000
+      ),
+      false
+    )
+  );
+
+alter table public.traditions
+  drop constraint if exists traditions_biography_date_order_check;
+
+alter table public.traditions
+  add constraint traditions_biography_date_order_check
+  check (entry_type <> 'biography' or death_date >= birth_date);
 
 create index if not exists traditions_publication_date_idx
   on public.traditions (status, created_at desc);

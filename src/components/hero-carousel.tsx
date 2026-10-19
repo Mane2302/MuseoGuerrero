@@ -3,12 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { getEntrySummary, getEntryTypeLabel } from "@/lib/entry-content";
 import type { Tradition } from "@/lib/types";
 
 export function HeroCarousel({ traditions }: { traditions: Tradition[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const current = traditions[activeIndex];
+  const summary = current ? getEntrySummary(current) : "";
 
   useEffect(() => {
     if (traditions.length < 2 || paused) return;
@@ -28,7 +30,7 @@ export function HeroCarousel({ traditions }: { traditions: Tradition[] }) {
   return (
     <section
       className="hero-section"
-      aria-label="Tradiciones destacadas"
+      aria-label="Celebraciones y personajes destacados"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -40,10 +42,10 @@ export function HeroCarousel({ traditions }: { traditions: Tradition[] }) {
         {current ? (
           <>
             <p className="eyebrow"><span /> Memorias que nos unen</p>
-            <p className="hero-kicker">{current.category} · {current.municipality}, Guerrero</p>
+            <p className="hero-kicker">{getEntryTypeLabel(current.entry_type)} · {current.municipality}, Guerrero</p>
             <h1>{current.title}</h1>
-            <p className="hero-byline">Por {current.tradition_author} · Región {current.region}</p>
-            <p className="hero-lede">{current.description.length > 240 ? `${current.description.slice(0, 237).trimEnd()}…` : current.description}</p>
+            <p className="hero-byline">Por {current.tradition_author}</p>
+            <p className="hero-lede">{summary.length > 240 ? `${summary.slice(0, 237).trimEnd()}…` : summary}</p>
             <div className="hero-actions">
               <Link className="button button-dark" href={`/tradiciones/${current.id}`}>Descubrir esta historia <span aria-hidden="true">↗</span></Link>
               <Link className="text-link" href="#coleccion">Explorar todas las fichas <span aria-hidden="true">→</span></Link>
@@ -54,9 +56,9 @@ export function HeroCarousel({ traditions }: { traditions: Tradition[] }) {
           <>
             <p className="eyebrow"><span /> Un museo vivo, hecho en comunidad</p>
             <h1>Ecos de Guerrero:<br /><em>de la Patria a la Eternidad</em></h1>
-            <p className="hero-lede">Las historias de las comunidades aparecerán aquí cuando sus fichas sean aprobadas.</p>
+            <p className="hero-lede">Las celebraciones municipales del Día de Muertos y las biografías de personajes de la Independencia aparecerán aquí cuando sus fichas sean aprobadas.</p>
             <div className="hero-actions">
-              <Link className="button button-dark" href="/login">Comparte una tradición <span aria-hidden="true">↗</span></Link>
+              <Link className="button button-dark" href="/login">Crea una ficha <span aria-hidden="true">↗</span></Link>
             </div>
           </>
         )}

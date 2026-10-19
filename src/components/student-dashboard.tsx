@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TraditionForm, type TraditionDraft } from "@/components/tradition-form";
+import { getEntryTypeLabel } from "@/lib/entry-content";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
 import type { Tradition, TraditionStatus } from "@/lib/types";
 
@@ -84,9 +85,12 @@ export function StudentDashboard({ userId }: { userId: string }) {
       if (uploadError) throw new Error(`No se pudo subir la imagen: ${uploadError.message}`);
     }
 
+    const imagePath = uploadedPath ?? editing?.image_path;
+    if (!imagePath) throw new Error("Agrega una imagen para completar la ficha.");
+
     const values = {
       ...draft,
-      ...(uploadedPath ? { image_path: uploadedPath } : {}),
+      image_path: imagePath,
       status: "pending" as const,
       review_note: null,
       reviewer_id: null,
@@ -161,7 +165,7 @@ export function StudentDashboard({ userId }: { userId: string }) {
               {traditions.map((tradition) => (
                 <article className="submission-card" key={tradition.id}>
                   <div className="submission-top">
-                    <div><h3>{tradition.title}</h3><p className="submission-meta">{tradition.municipality} · {tradition.region} · Modificada {formatDate(tradition.updated_at)}</p></div>
+                    <div><h3>{tradition.title}</h3><p className="submission-meta">{getEntryTypeLabel(tradition.entry_type)} · {tradition.municipality} · Modificada {formatDate(tradition.updated_at)}</p></div>
                     <span className={`status-badge status-${tradition.status}`}>{statusLabels[tradition.status]}</span>
                   </div>
                   {tradition.review_note && <p className="review-note"><strong>Nota del equipo:</strong> {tradition.review_note}</p>}
