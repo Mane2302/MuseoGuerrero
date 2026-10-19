@@ -17,6 +17,8 @@ export const demoTraditions: Tradition[] = [
       "El tejido en telar de cintura forma parte de la vida comunitaria amuzga desde hace siglos. La técnica y sus diseños se aprenden en familia, observando, practicando y compartiendo saberes.",
     cultural_significance:
       "El huipil expresa pertenencia, memoria y creatividad. Sus formas y colores dialogan con la vida de la comunidad y con la identidad del pueblo Ñomndaa.",
+    historical_connection:
+      "Ejemplo demostrativo: no presupone una relación directa. Investiga cómo se recuerda la Independencia en Guerrero y compara esa memoria con prácticas locales de Día de Muertos; sustenta cualquier vínculo con fuentes.",
     image_path: "demo:telar-amuzgo.svg",
     sources: ["Ejemplo demostrativo: completar con entrevista o fuente verificable."],
     status: "approved",
@@ -42,6 +44,8 @@ export const demoTraditions: Tradition[] = [
       "La tradición platera de Taxco creció durante el siglo XX y reunió a maestros artesanos, aprendices y diseñadores. El trabajo manual sigue dando forma a piezas únicas.",
     cultural_significance:
       "La platería es una expresión de identidad local y de creatividad colectiva. También recuerda la importancia de cuidar y transmitir los oficios artesanales.",
+    historical_connection:
+      "Ejemplo demostrativo: no presupone una relación directa. Investiga cómo se recuerda la Independencia en Guerrero y compara esa memoria con prácticas locales de Día de Muertos; sustenta cualquier vínculo con fuentes.",
     image_path: "demo:plateria-taxco.svg",
     sources: ["Ejemplo demostrativo: completar con entrevista o fuente verificable."],
     status: "approved",
@@ -67,6 +71,8 @@ export const demoTraditions: Tradition[] = [
       "La danza se presenta en fiestas y celebraciones de la región Centro. Sus personajes, música y coreografía se transmiten en grupos que mantienen viva la tradición.",
     cultural_significance:
       "La representación celebra el trabajo agrícola, la cooperación y el vínculo con el territorio. Cada comparsa aporta su propio estilo y memoria.",
+    historical_connection:
+      "Ejemplo demostrativo: no presupone una relación directa. Investiga cómo se recuerda la Independencia en Guerrero y compara esa memoria con prácticas locales de Día de Muertos; sustenta cualquier vínculo con fuentes.",
     image_path: "demo:tlacololeros.svg",
     sources: ["Ejemplo demostrativo: completar con entrevista o fuente verificable."],
     status: "approved",
@@ -92,6 +98,8 @@ export const demoTraditions: Tradition[] = [
       "El maque de Olinalá combina preparación de materiales, color y dibujo. La enseñanza del oficio suele comenzar en casa y requiere práctica minuciosa.",
     cultural_significance:
       "La laca es una forma de conocimiento local y un sello de identidad. Sus motivos narran la relación de la comunidad con su entorno y sus recuerdos.",
+    historical_connection:
+      "Ejemplo demostrativo: no presupone una relación directa. Investiga cómo se recuerda la Independencia en Guerrero y compara esa memoria con prácticas locales de Día de Muertos; sustenta cualquier vínculo con fuentes.",
     image_path: "demo:laca-olinala.svg",
     sources: ["Ejemplo demostrativo: completar con entrevista o fuente verificable."],
     status: "approved",
@@ -122,6 +130,7 @@ export const categories = [
   "Lengua",
   "Música",
   "Fiesta y celebración",
+  "Memoria histórica",
   "Conocimiento tradicional",
   "Otro",
 ];

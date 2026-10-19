@@ -14,6 +14,7 @@ export interface TraditionDraft {
   description: string;
   history: string;
   cultural_significance: string;
+  historical_connection: string;
   sources: string[];
 }
 
@@ -33,6 +34,7 @@ export function TraditionForm({ initial, onSubmit, submitLabel, onCancel }: Trad
   const [description, setDescription] = useState(initial?.description ?? "");
   const [history, setHistory] = useState(initial?.history ?? "");
   const [significance, setSignificance] = useState(initial?.cultural_significance ?? "");
+  const [historicalConnection, setHistoricalConnection] = useState(initial?.historical_connection ?? "");
   const [sources, setSources] = useState(initial?.sources.join("\n") ?? "");
   const [image, setImage] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
@@ -69,6 +71,7 @@ export function TraditionForm({ initial, onSubmit, submitLabel, onCancel }: Trad
         description: description.trim(),
         history: history.trim(),
         cultural_significance: significance.trim(),
+        historical_connection: historicalConnection.trim(),
         sources: sources.split("\n").map((source) => source.trim()).filter(Boolean),
       }, image);
     } catch (error) {
@@ -80,16 +83,22 @@ export function TraditionForm({ initial, onSubmit, submitLabel, onCancel }: Trad
 
   return (
     <form className="form-stack" onSubmit={submit}>
-      <label className="form-field"><span className="form-label">Título de la tradición</span><input className="form-input" required maxLength={140} value={title} onChange={(event) => setTitle(event.target.value)} /></label>
+      <div className="activity-brief">
+        <strong>Propósito de la actividad</strong>
+        <p>Vincular la memoria histórica de la Independencia de México en Guerrero con la tradición del Día de Muertos, para reconocer, valorar y difundir el patrimonio cultural, cívico e histórico que define la identidad nacional actual.</p>
+        <p>Investiga una tradición, práctica conmemorativa, personaje o lugar de Guerrero. Compara lo que encontraste y explica el vínculo solo cuando puedas respaldarlo con fuentes; si no encuentras una relación directa, dilo con claridad.</p>
+      </div>
+      <label className="form-field"><span className="form-label">Título de la ficha</span><input className="form-input" required maxLength={140} value={title} onChange={(event) => setTitle(event.target.value)} /></label>
       <div className="detail-copy">
         <label className="form-field"><span className="form-label">Categoría</span><select className="form-select" required value={category} onChange={(event) => setCategory(event.target.value)}><option value="">Selecciona una categoría</option>{categories.map((item) => <option key={item}>{item}</option>)}</select></label>
         <label className="form-field"><span className="form-label">Región</span><select className="form-select" required value={region} onChange={(event) => setRegion(event.target.value)}><option value="">Selecciona una región</option>{regions.map((item) => <option key={item}>{item}</option>)}</select></label>
       </div>
       <label className="form-field"><span className="form-label">Municipio</span><input className="form-input" required maxLength={100} value={municipality} onChange={(event) => setMunicipality(event.target.value)} /></label>
       <label className="form-field"><span className="form-label">Autor o autora de la ficha</span><input className="form-input" required minLength={2} maxLength={120} value={traditionAuthor} onChange={(event) => setTraditionAuthor(event.target.value)} placeholder="Nombre de la persona, colectivo o comunidad" /><span className="form-hint">Escribe quién comparte o documenta esta ficha. Pide permiso antes de publicar nombres.</span></label>
-      <label className="form-field"><span className="form-label">Descripción</span><textarea className="form-textarea" required minLength={20} maxLength={1200} value={description} onChange={(event) => setDescription(event.target.value)} /><span className="form-hint">Cuenta brevemente en qué consiste. (20–1,200 caracteres)</span></label>
-      <label className="form-field"><span className="form-label">Historia</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={history} onChange={(event) => setHistory(event.target.value)} /></label>
-      <label className="form-field"><span className="form-label">Significado cultural</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={significance} onChange={(event) => setSignificance(event.target.value)} /></label>
+      <label className="form-field"><span className="form-label">Descripción</span><textarea className="form-textarea" required minLength={20} maxLength={1200} value={description} onChange={(event) => setDescription(event.target.value)} /><span className="form-hint">Presenta la tradición, conmemoración, personaje o lugar que investigaste. (20–1,200 caracteres)</span></label>
+      <label className="form-field"><span className="form-label">Historia</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={history} onChange={(event) => setHistory(event.target.value)} /><span className="form-hint">Explica sus antecedentes y cómo se relaciona con la historia de Guerrero. Distingue los hechos documentados de los relatos o interpretaciones.</span></label>
+      <label className="form-field"><span className="form-label">Significado cultural</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={significance} onChange={(event) => setSignificance(event.target.value)} /><span className="form-hint">¿Qué valores, recuerdos o identidad expresa para las personas o comunidades?</span></label>
+      <label className="form-field"><span className="form-label">Vínculo entre la Independencia y el Día de Muertos</span><textarea className="form-textarea" required minLength={20} maxLength={2000} value={historicalConnection} onChange={(event) => setHistoricalConnection(event.target.value)} /><span className="form-hint">Compara la memoria histórica de la Independencia en Guerrero con la tradición del Día de Muertos. Describe un vínculo respaldado por fuentes o explica con honestidad si no encontraste uno directo; no presentes una coincidencia como un hecho histórico.</span></label>
       <label className="form-field">
         <span className="form-label">Imagen de la tradición</span>
         {initial?.image_url && !image && <div className="current-image"><Image src={initial.image_url} alt={`Imagen actual de ${initial.title}`} width={240} height={140} unoptimized /></div>}

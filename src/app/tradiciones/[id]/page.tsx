@@ -36,6 +36,7 @@ export default async function TraditionPage({ params }: TraditionPageProps) {
           <section><h2>La tradición</h2><p>{tradition.description}</p></section>
           <section><h2>Historia</h2><p>{tradition.history}</p></section>
           <section><h2>¿Qué significa para su comunidad?</h2><p>{tradition.cultural_significance}</p></section>
+          <section><h2>Independencia y Día de Muertos</h2><p>{tradition.historical_connection}</p></section>
           <section><h2>Fuentes consultadas</h2><ul className="source-list">{tradition.sources.map((source, index) => <li key={`${index}-${source}`}>{source}</li>)}</ul></section>
         </div>
         {tradition.is_demo && <div className="demo-notice">Ficha de muestra demostrativa. Verifica y sustituye su contenido por fuentes y testimonios comunitarios antes de presentarla como una investigación.</div>}
