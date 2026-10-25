@@ -40,6 +40,10 @@ Si ya habías aplicado una versión anterior del esquema, abre **Supabase → SQ
 
 La migración de formatos conserva el contenido anterior, prepara los campos nuevos y devuelve las fichas anteriores a estado **pendiente** para que se actualicen y revisen antes de publicarse con el nuevo formato. La migración de apartados conserva también los valores históricos de las secciones retiradas, pero permite guardar las fichas sin volver a pedirlos. Espera unos segundos para que PostgREST recargue el esquema antes de volver a guardar fichas. Ejecuta las migraciones en el proyecto indicado por `NEXT_PUBLIC_SUPABASE_URL`; actualizar el código no modifica la base de datos.
 
+### Borradores con guardado automático
+
+Para que los borradores de las fichas se guarden en línea (y los estudiantes puedan continuar desde otro dispositivo), ejecuta **solo** [`supabase/migrations/20261025_add_tradition_drafts.sql`](./supabase/migrations/20261025_add_tradition_drafts.sql) en el SQL Editor. Crea la tabla nueva `tradition_drafts` y no modifica `traditions` ni las fichas ya enviadas. Mientras no se ejecute, la aplicación guarda los borradores únicamente en el navegador de cada estudiante.
+
 ### Crear la primera cuenta administradora
 
 1. Inicia la aplicación con las variables de Supabase, abre `/login` y crea la cuenta con el correo institucional del profesor. Confirma el correo si el proyecto lo requiere.

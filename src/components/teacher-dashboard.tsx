@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { TraditionForm, type TraditionDraft } from "@/components/tradition-form";
+import { TraditionForm, type SubmitImage, type TraditionDraft } from "@/components/tradition-form";
 import { TraditionContent } from "@/components/tradition-content";
 import { getEntryTypeLabel } from "@/lib/entry-content";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
@@ -108,7 +108,7 @@ export function TeacherDashboard({ userId }: { userId: string }) {
     await loadTraditions();
   }
 
-  async function saveEdit(tradition: Tradition, draft: TraditionDraft, image: File | null) {
+  async function saveEdit(tradition: Tradition, draft: TraditionDraft, { file: image }: SubmitImage) {
     if (!supabase) throw new Error("Configura Supabase antes de revisar fichas.");
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError) throw authError;
@@ -181,6 +181,13 @@ export function TeacherDashboard({ userId }: { userId: string }) {
   }
 
   const visible = traditions.filter((tradition) => selectedStatus === "all" || tradition.status === selectedStatus);
+  // Fichas sent more than once by the same student (same type and title) before duplicates were prevented.
+  const duplicateKey = (tradition: Tradition) => `${tradition.author_id}|${tradition.entry_type}|${tradition.title.trim().toLocaleLowerCase("es")}`;
+  const duplicateCounts = traditions.reduce((counts, tradition) => {
+    const key = duplicateKey(tradition);
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+    return counts;
+  }, new Map<string, number>());
   return (
     <>
       <div className="panel-toolbar">
@@ -206,7 +213,14 @@ export function TeacherDashboard({ userId }: { userId: string }) {
             <article className="submission-card" key={tradition.id}>
               <div className="submission-top">
                 <div><h3>{tradition.title}</h3><p className="submission-meta">{getEntryTypeLabel(tradition.entry_type)} · Por {authorNames[tradition.author_id] ?? "Estudiante"} · {tradition.municipality} · Enviada {formatDate(tradition.created_at)} · Modificada {formatDate(tradition.updated_at)}</p></div>
-                <span className={`status-badge status-${tradition.status}`}>{statusLabels[tradition.status]}</span>
+                <div className="badge-stack">
+                  <span className={`status-badge status-${tradition.status}`}>{statusLabels[tradition.status]}</span>
+                  {(duplicateCounts.get(duplicateKey(tradition)) ?? 0) > 1 && (
+                    <span className="status-badge status-duplicate" title="El mismo estudiante envió otra ficha con este título. Revisa y elimina la copia que sobre.">
+                      Posible duplicado ×{duplicateCounts.get(duplicateKey(tradition))}
+                    </span>
+                  )}
+                </div>
               </div>
               <details className="preview-details">
                 <summary>Vista previa de la ficha</summary>

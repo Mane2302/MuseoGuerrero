@@ -48,6 +48,15 @@ export type Tradition = {
   is_demo?: boolean;
 };
 
+export type TraditionDraftRow = {
+  id: string;
+  author_id: string;
+  content: Record<string, unknown>;
+  image_path: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 export type Profile = {
   id: string;
   display_name: string;
@@ -140,6 +149,23 @@ export interface Database {
           reviewer_id?: string | null;
           reviewed_at?: string | null;
           created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      tradition_drafts: {
+        Row: TraditionDraftRow;
+        Insert: {
+          id: string;
+          author_id: string;
+          content: Record<string, unknown>;
+          image_path?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          content?: Record<string, unknown>;
+          image_path?: string | null;
           updated_at?: string;
         };
         Relationships: [];

@@ -24,7 +24,7 @@ export function SiteFooter() {
         <span className="footer-brand">Ecos de Guerrero</span>
         <span className="footer-subtitle">De la Patria a la Eternidad</span>
       </Link>
-      <span className="footer-course">Tecnología I y II</span>
+      <span className="footer-course">Tecnología I</span>
     </footer>
   );
 }
