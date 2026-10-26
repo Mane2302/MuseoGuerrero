@@ -33,7 +33,7 @@ Museo digital educativo centrado en las celebraciones del Día de Muertos en los
    NEXT_PUBLIC_SUPABASE_ANON_KEY=tu-clave-publica
    ```
 
-   No pongas la clave `service_role` en variables `NEXT_PUBLIC_*`, en el navegador ni en el repositorio. Esta aplicación no la necesita.
+   No pongas la clave `service_role` en variables `NEXT_PUBLIC_*`, en el navegador ni en el repositorio. Solo la usa, de forma opcional, la pestaña **Estudiantes** del panel docente (ver abajo).
 5. Decide si exigir confirmación de correo en **Authentication → Providers → Email**. Si está activada, el estudiante debe confirmar su correo antes de iniciar sesión.
 
 Si ya habías aplicado una versión anterior del esquema, abre **Supabase → SQL Editor** y ejecuta las migraciones necesarias en orden: [`supabase/migrations/20261018_add_tradition_author.sql`](./supabase/migrations/20261018_add_tradition_author.sql) para añadir la autoría si todavía no está, [`supabase/migrations/20261019_add_entry_types.sql`](./supabase/migrations/20261019_add_entry_types.sql) para habilitar los dos formatos nuevos y [`supabase/migrations/20261019_adjust_entry_sections.sql`](./supabase/migrations/20261019_adjust_entry_sections.sql) para retirar de la validación los apartados eliminados.
@@ -43,6 +43,10 @@ La migración de formatos conserva el contenido anterior, prepara los campos nue
 ### Borradores con guardado automático
 
 Para que los borradores de las fichas se guarden en línea (y los estudiantes puedan continuar desde otro dispositivo), ejecuta **solo** [`supabase/migrations/20261025_add_tradition_drafts.sql`](./supabase/migrations/20261025_add_tradition_drafts.sql) en el SQL Editor. Crea la tabla nueva `tradition_drafts` y no modifica `traditions` ni las fichas ya enviadas. Mientras no se ejecute, la aplicación guarda los borradores únicamente en el navegador de cada estudiante.
+
+### Administrar cuentas de estudiantes
+
+La pestaña **Estudiantes** de `/profesor` lista a las personas registradas y permite asignar una contraseña nueva o cambiar el correo de una cuenta de estudiante (por ejemplo, si olvidó su contraseña). Para activarla, agrega en Vercel y en `.env.local` la variable de servidor `SUPABASE_SERVICE_ROLE_KEY` con la clave **service_role** de **Project Settings → API**, sin prefijo `NEXT_PUBLIC_`, y vuelve a desplegar. La clave solo se usa en el servidor, cada acción verifica que quien la ejecuta sea administrador, y las cuentas del equipo docente no se pueden modificar desde ese panel.
 
 ### Crear la primera cuenta administradora
 

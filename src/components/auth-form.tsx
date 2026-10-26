@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useId, useState } from "react";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
 
 export function AuthForm() {
@@ -11,6 +11,8 @@ export function AuthForm() {
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const passwordId = useId();
   const [errorMessage, setErrorMessage] = useState("");
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
@@ -79,11 +81,33 @@ export function AuthForm() {
           <span className="form-label">Correo electrónico</span>
           <input className="form-input" type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} />
         </label>
-        <label className="form-field">
-          <span className="form-label">Contraseña</span>
-          <input className="form-input" type="password" autoComplete={mode === "login" ? "current-password" : "new-password"} minLength={8} required value={password} onChange={(event) => setPassword(event.target.value)} />
+        <div className="form-field">
+          <label className="form-label" htmlFor={passwordId}>Contraseña</label>
+          <div className="password-field">
+            <input
+              id={passwordId}
+              className="form-input"
+              type={showPassword ? "text" : "password"}
+              autoComplete={mode === "login" ? "current-password" : "new-password"}
+              minLength={8}
+              required
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <button
+              className="password-toggle"
+              type="button"
+              aria-controls={passwordId}
+              aria-pressed={showPassword}
+              aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+              title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+              onClick={() => setShowPassword((visible) => !visible)}
+            >
+              {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+            </button>
+          </div>
           {mode === "signup" && <span className="form-hint">Usa al menos 8 caracteres.</span>}
-        </label>
+        </div>
         {errorMessage && <div className="error-message" role="alert">{errorMessage}</div>}
         {notice && <div className="success-message" role="status">{notice}</div>}
         <button className="button button-dark button-full" type="submit" disabled={loading}>
@@ -98,5 +122,26 @@ export function AuthForm() {
       </div>
       <div className="auth-switch"><Link href="/">← Volver al museo</Link></div>
     </section>
+  );
+}
+
+/* Eye icons from Lucide (https://lucide.dev), ISC License: free to use without attribution. */
+function EyeIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+      <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+function EyeOffIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+      <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+      <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+      <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+      <path d="m2 2 20 20" />
+    </svg>
   );
 }

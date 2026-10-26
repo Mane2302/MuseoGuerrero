@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TraditionForm, type SubmitImage, type TraditionDraft } from "@/components/tradition-form";
+import { StudentAccounts } from "@/components/student-accounts";
 import { TraditionContent } from "@/components/tradition-content";
 import { getEntryTypeLabel } from "@/lib/entry-content";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
@@ -29,6 +30,7 @@ export function TeacherDashboard({ userId }: { userId: string }) {
   const [selectedStatus, setSelectedStatus] = useState<"all" | TraditionStatus>("pending");
   const [notes, setNotes] = useState<Record<string, string>>({});
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [tab, setTab] = useState<"fichas" | "cuentas">("fichas");
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const [notice, setNotice] = useState("");
@@ -188,11 +190,36 @@ export function TeacherDashboard({ userId }: { userId: string }) {
     counts.set(key, (counts.get(key) ?? 0) + 1);
     return counts;
   }, new Map<string, number>());
+  const pendingCount = traditions.filter((item) => item.status === "pending").length;
+
+  const tabBar = (
+    <div className="panel-toolbar">
+      <div className="panel-tabs" role="tablist" aria-label="Secciones del panel">
+        <button className={`panel-tab${tab === "fichas" ? " is-active" : ""}`} type="button" role="tab" aria-selected={tab === "fichas"} onClick={() => setTab("fichas")}>
+          Fichas {pendingCount > 0 && <span className="panel-tab-count">{pendingCount}</span>}
+        </button>
+        <button className={`panel-tab${tab === "cuentas" ? " is-active" : ""}`} type="button" role="tab" aria-selected={tab === "cuentas"} onClick={() => setTab("cuentas")}>
+          Estudiantes
+        </button>
+      </div>
+      <div className="footer-actions"><Link className="text-link" href="/">Ver museo ↗</Link><button className="logout-button" type="button" onClick={signOut}>Cerrar sesión</button></div>
+    </div>
+  );
+
+  if (tab === "cuentas") {
+    return (
+      <>
+        {tabBar}
+        <StudentAccounts />
+      </>
+    );
+  }
+
   return (
     <>
+      {tabBar}
       <div className="panel-toolbar">
-        <h2>Fichas del museo <span className="form-hint">({traditions.filter((item) => item.status === "pending").length} pendientes)</span></h2>
-        <div className="footer-actions"><Link className="text-link" href="/">Ver museo ↗</Link><button className="logout-button" type="button" onClick={signOut}>Cerrar sesión</button></div>
+        <h2>Fichas del museo <span className="form-hint">({pendingCount} pendientes)</span></h2>
       </div>
       {errorMessage && <div className="error-message" role="alert">{errorMessage}</div>}
       {notice && <div className="success-message" role="status">{notice}</div>}

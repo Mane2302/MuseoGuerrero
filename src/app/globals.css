@@ -206,6 +206,12 @@ h1, h2, h3 { text-wrap: balance; }
 .form-textarea { min-height: 140px; resize: vertical; line-height: 1.6; }
 .form-textarea-short { min-height: 96px; }
 .form-input::placeholder, .form-textarea::placeholder { color: #8b9088; }
+.password-field { position: relative; }
+.password-field .form-input { padding-right: 52px; }
+.password-field .form-input::-ms-reveal { display: none; }
+.password-toggle { width: 44px; height: 44px; position: absolute; top: 50%; right: 2px; display: grid; place-items: center; padding: 0; border: 0; border-radius: var(--radius); background: transparent; color: var(--muted); cursor: pointer; transform: translateY(-50%); transition-property: color, background-color; transition-duration: .15s; }
+.password-toggle:hover { background: var(--green-wash); color: var(--green); }
+.password-toggle[aria-pressed="true"] { color: var(--green); }
 .form-hint { color: var(--muted); font-size: 13px; line-height: 1.5; }
 .char-count { justify-self: end; color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
 .char-count.is-short { color: var(--clay); font-weight: 600; }
@@ -267,6 +273,22 @@ h1, h2, h3 { text-wrap: balance; }
 .small-button-danger { color: var(--danger); }
 .small-button-danger:hover { border-color: var(--danger); background: #fbefeb; }
 .review-note { margin: 12px 0 0; padding: 11px 13px; border-left: 3px solid var(--gold); border-radius: 0 var(--radius) var(--radius) 0; background: #f6f1e4; color: #5d5032; font-size: 14px; line-height: 1.55; }
+.panel-tabs { padding: 4px; display: inline-flex; gap: 4px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper-deep); }
+.panel-tab { min-height: 40px; display: inline-flex; align-items: center; gap: 8px; padding: 0 18px; border: 0; border-radius: 999px; background: transparent; color: var(--ink-soft); cursor: pointer; font-size: 15px; font-weight: 700; transition-property: background-color, color, box-shadow; transition-duration: .15s; }
+.panel-tab:hover { color: var(--green); }
+.panel-tab.is-active { background: var(--surface); color: var(--green); box-shadow: 0 1px 3px rgba(29,38,32,.12); }
+.panel-tab-count { min-width: 22px; height: 22px; display: inline-grid; place-items: center; padding: 0 6px; border-radius: 99px; background: var(--clay); color: #fff; font-size: 12px; font-variant-numeric: tabular-nums; }
+.catalog-tools-single { grid-template-columns: minmax(0,1fr); }
+.account-email { color: var(--ink-soft); font-weight: 600; overflow-wrap: anywhere; }
+.account-locked { margin: 12px 0 0; }
+.account-editor { margin-top: 16px; padding-top: 16px; display: grid; gap: 18px; border-top: 1px solid var(--line); }
+.inline-field { display: flex; flex-wrap: wrap; gap: 8px; }
+.inline-field .form-input { flex: 1 1 220px; }
+.inline-field-end { display: flex; justify-content: flex-end; }
+.shared-password { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.shared-password code { padding: 6px 10px; border: 1px dashed #9cc0a6; border-radius: var(--radius); background: #fff; color: var(--ink); font: 700 16px/1.2 ui-monospace, "Cascadia Mono", Consolas, monospace; letter-spacing: .5px; user-select: all; }
+.setup-card ol { margin: 12px 0; padding-left: 22px; display: grid; gap: 8px; color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
+.setup-card code { padding: 1px 6px; border-radius: 4px; background: var(--paper-deep); font-size: .92em; }
 .review-actions { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
 
 /* ---------- Ficha ---------- */
@@ -360,6 +382,8 @@ h1, h2, h3 { text-wrap: balance; }
   .auth-card, .panel-card { padding: 20px; }
   .page-main { width: calc(100% - 32px); padding: 34px 0 64px; }
   .panel-toolbar { align-items: flex-start; flex-direction: column; }
+  .panel-tabs { width: 100%; }
+  .panel-tab { flex: 1; justify-content: center; }
   .form-grid-2 { grid-template-columns: 1fr; }
   .form-actionbar { margin: 4px -20px -20px; padding: 12px 20px 14px; }
   .form-actionbar-buttons { display: grid; grid-template-columns: 1fr 1fr; }
